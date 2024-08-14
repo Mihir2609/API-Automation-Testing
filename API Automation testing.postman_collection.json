@@ -1,0 +1,177 @@
+{
+	"info": {
+		"_postman_id": "3d1992df-8ed9-4f52-9de4-94670a639bd7",
+		"name": "API Automation testing",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37542007"
+	},
+	"item": [
+		{
+			"name": "https://jsonplaceholder.typicode.com/todos/",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"console.log(\"API Automation Testing started!!\")\r",
+							"//API Automation Test Cases\r",
+							"\r",
+							"//TC01 - Validate Status code\r",
+							"pm.test(\"Status code is 200 OK\", function(){\r",
+							"//    pm.response.to.have.status(200);//standard code\r",
+							"   pm.expect(pm.response.code).to.eql(200)//using Assertion\r",
+							"});\r",
+							"\r",
+							"//TC02 - Validate Response time of API.\r",
+							"pm.test(\"Response time is less than 2 seconds\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+							"});\r",
+							"\r",
+							"//TC03 - Validate if the Content-Type Header is application/json.\r",
+							"pm.test(\"Content-Type is application/json\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\", \"application/json\");\r",
+							"});\r",
+							"\r",
+							"//TC04 - Validate Reponse body validation\r",
+							"//Sub test cases,\r",
+							"// TC04-1 - All field Data types.\r",
+							"// TC04-2 - Each every record define field should be present.\r",
+							"// TC04-3 - Field value should not be out of defined regex.\r",
+							"// TC04-4 - Ensuring that your JSON data conforms strictly to the defined schema\r",
+							"    let schema = {\r",
+							"        type: 'array',\r",
+							"        items: {\r",
+							"            type: 'object',\r",
+							"            properties: {\r",
+							"                userId: {\r",
+							"                    type: 'integer',\r",
+							"                    pattern:  '^-?\\d+$',\r",
+							"                },\r",
+							"                id: {\r",
+							"                    type: 'integer',\r",
+							"                    pattern: '^-?\\d+$',\r",
+							"                },\r",
+							"                title: {\r",
+							"                    type: ['string','null'],\r",
+							"                    examples:['delectus aut autem']\r",
+							"                    // pattern: '^[a-zA-Zs]*$',\r",
+							"                },\r",
+							"                completed: {\r",
+							"                    type: 'boolean',\r",
+							"                    examples: [true,false],\r",
+							"                    pattern: '\\s*(true|false)',\r",
+							"                }\r",
+							"            },\r",
+							"            required: ['userId', 'id', 'title', 'completed'],\r",
+							"            additionalProperties: false//ensuring that your JSON data conforms strictly to the defined schema\r",
+							"        }\r",
+							"    };\r",
+							"pm.test('Schema is valid', function() {\r",
+							"    pm.response.to.have.jsonSchema(schema)\r",
+							"});\r",
+							"\r",
+							"// TC05 - Validate id Field is Unique Across the Entire Response Body\r",
+							"pm.test(\"All 'id' values are unique\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    \r",
+							"    // Check if the response is an array\r",
+							"    pm.expect(jsonData).to.be.an('array');\r",
+							"\r",
+							"    // Extract 'id' values from the response\r",
+							"    const ids = jsonData.map(item => item.id);\r",
+							"    \r",
+							"    // Use a Set to filter out duplicate ids\r",
+							"    const uniqueIds = [...new Set(ids)];\r",
+							"    \r",
+							"    // Check if the length of the uniqueIds array matches the length of the original ids array\r",
+							"    pm.expect(uniqueIds.length).to.eql(ids.length);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"console.clear()"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "apikey"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": "https://jsonplaceholder.typicode.com/todos",
+			"type": "string"
+		}
+	]
+}
